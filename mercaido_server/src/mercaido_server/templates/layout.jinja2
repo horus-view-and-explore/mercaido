@@ -1,0 +1,30 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Mercaido</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="{{ 'mercaido_server:static/css/material-icons.css' | static_path }}" />
+    <link rel="stylesheet" href="{{ 'mercaido_server:static/css/materialize.min.css' | static_path }}" />
+    <link rel="stylesheet" href="{{ 'mercaido_server:static/css/app.css' | static_path }}" />
+    <script src="{{ 'mercaido_server:static/js/materialize.min.js' | static_path }}"></script>
+    <script type="module" src="{{ 'mercaido_server:static/js/app.js' | static_path }}"></script>
+  </head>
+  <body>
+    <header>
+      {% include "./navbar.jinja2" %}
+    </header>
+    <main class="container" style="margin-top: 4rem;">
+      {%- block body %} {% endblock body -%}
+      <aside id="jobs-root" class="sidenav nav-right">
+        <mercaido-jobs></mercaido-jobs>
+      </aside>
+    </main>
+  </body>
+</html>

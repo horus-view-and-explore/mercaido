@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "mercaido-panorama"
+version = "0.1.0"
+description = "Example Mercaido service that exports recordings as equirectangular panoramic images"
+authors = ["Erwin Boskma", "Frank Smit"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "mercaido_panorama", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mercaido-client = { path = "../../mercaido_client", develop = true }
+psycopg2 = "^2.9.6"
+horus-media-client = "^0.9.6"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+mercaido_panorama_service = "mercaido_panorama:main"

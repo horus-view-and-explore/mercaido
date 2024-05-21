@@ -1,0 +1,58 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: mercaido
+Upstream-Contact: Horus View and Explore B.V. <>
+Source: https://github.com/horus-view-and-explore/mercaido
+
+Files:
+	README.md
+	do
+	examples/mercaido_dummy_service/README.md
+	examples/mercaido_dummy_service/pyproject.toml
+	examples/mercaido_panorama/README.md
+	examples/mercaido_panorama/pyproject.toml
+	flake.lock
+	mercaido_client/README.md
+	mercaido_client/pyproject.toml
+	mercaido_server/README.md
+	mercaido_server/pyproject.toml
+	mercaido_server/src/mercaido_server/migrations/script.py.mako
+Copyright: 2023, 2024 Horus View and Explore B.V.
+License: MIT
+
+Files:
+	.envrc
+	.gitignore
+	deploy.sh
+	examples/mercaido_dummy_service/poetry.lock
+	examples/mercaido_panorama/poetry.lock
+	mercaido_client/poetry.lock
+	mercaido_server/example_config/*-example.ini
+	mercaido_server/poetry.lock
+	TODO.md
+Copyright: 2023, 2024 Horus View and Explore B.V.
+License: CC0-1.0
+
+Files:
+	mercaido_server/src/mercaido_server/static/js/lit-core.min.js
+	mercaido_server/src/mercaido_server/static/js/lit-core.min.js.map
+Copyright: 2017 Google LLC. All rights reserved.
+License: BSD-3-Clause
+
+Files:
+	mercaido_server/src/mercaido_server/static/css/material-icons.css
+	mercaido_server/src/mercaido_server/static/css/materialize.css
+	mercaido_server/src/mercaido_server/static/css/materialize.min.css
+	mercaido_server/src/mercaido_server/static/fonts/material-icons.woff2
+	mercaido_server/src/mercaido_server/static/fonts/material-symbols-sharp.woff2
+	mercaido_server/src/mercaido_server/static/js/materialize.js
+	mercaido_server/src/mercaido_server/static/js/materialize.min.js
+	mercaido_server/src/mercaido_server/static/js/materialize.min.js.map
+Copyright: 2014-2019 Materialize
+License: MIT
+
+Files:
+	mercaido_server/src/mercaido_server/static/js/date-fns.js
+	mercaido_server/src/mercaido_server/static/js/format.js
+	mercaido_server/src/mercaido_server/static/js/format.js.map
+Copyright: 2021 Sasha Koss and Lesha Koss
+License: MIT

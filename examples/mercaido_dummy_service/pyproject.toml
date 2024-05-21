@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "mercaido-dummy-service"
+version = "0.1.0"
+description = "A simple example service that does nothing."
+authors = ["Erwin Boskma", "Frank Smit"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "mercaido_dummy_service", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mercaido-client = { path = "../../mercaido_client", develop = true }
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+mercaido_dummy_service = "mercaido_dummy_service:main"

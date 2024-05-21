@@ -1,0 +1,84 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+{% macro service_input(attribute) -%}
+  <div class="row" style="margin-bottom: 1rem;">
+    <div class="input-field inline col s6">
+      {% if attribute.type == 5 and recordings is not none -%}
+        {{ recordings_autocomplete(attribute, recordings) }}
+      {% elif attribute.type == 6 and recordingserver is not none -%}
+        {{ prefilled_input(attribute, recordingserver.connection_string) }}
+      {% elif attribute.type == 7 and mediaserver is not none -%}
+        {{ prefilled_input(attribute, mediaserver.endpoint) }}
+      {% elif attribute.type == 9 %}
+        <p>
+        <label>
+        <input
+          type="checkbox"
+          name="{{ attribute.id }}"
+          id="{{ attribute.id }}"
+          {%- if attribute.values | length > 0 and attribute.values[0] is not none and attribute.values[0].lower() == "true" -%}
+            checked
+          {%- endif -%}
+          />
+          <span>{{ attribute.display_name }}</span>
+        </label>
+        </p>
+      {% else %}
+        <input
+          type="{{ input_type(attribute) }}"
+          name="{{ attribute.id }}"
+          id="{{ attribute.id }}"
+          placeholder=""
+          value="{{ attribute.values[0] }}"
+          />
+        <label for="{{ attribute.id }}">{{ attribute.display_name }}</label>
+      {%- endif %}
+    </div>
+  </div>
+{%- endmacro %}
+
+{%- macro input_type(attribute) -%}
+  {%- if attribute.type == 8 -%}
+    number
+  {%- else -%}
+    text
+  {%- endif -%}
+{%- endmacro -%}
+
+{% macro prefilled_input(attribute, value) -%}
+  <i class="material-icons suffix">lock</i>
+  <input
+    type="text"
+    name="{{ attribute.id }}"
+    id="{{ attribute.id }}"
+    value="{{ value }}"
+    readonly
+    placeholder=""
+    class="grey-text"
+    style="cursor: not-allowed;"
+    />
+    <label for="{{ attribute.id }}">{{ attribute.display_name }}</label>
+{%- endmacro %}
+
+{% macro recordings_dropdown(attribute, recordings) -%}
+  <select id="{{ attribute.id }}" name="{{ attribute.id }}">
+    <option value="" disabled selected>{{ attribute.display_name }}</option>
+    {% for recording in recordings -%}
+      <option value="{{ recording.id }}">
+        [{{ recording.id }}] {{ recording.directory }}
+      </option>
+    {%- endfor %}
+  </select>
+  <label for="{{ attribute.id }}">{{ attribute.display_name }}</label>
+{%- endmacro %}
+
+{% macro recordings_autocomplete(attribute, recordings) -%}
+    <i class="material-icons prefix">video_file</i>
+    <input type="text" id="{{ attribute.id }}_text" name="{{ attribute.id }}_text" class="autocomplete" data-options='{{ recordings | tojson(indent=None) }}'>
+    <input type="hidden" id="{{ attribute.id }}" name="{{ attribute.id }}">
+    <label for="{{ attribute.id }}_text">{{ attribute.display_name }}</label>
+{%- endmacro %}

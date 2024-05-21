@@ -1,0 +1,67 @@
+/*
+ * SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+.card .card-image svg {
+  display: block;
+  border-radius: 2px 2px 0 0;
+  position: relative;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.job {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 1rem 1rem;
+    border-bottom: 1px solid #dedede;
+    margin-bottom: 1rem;
+}
+
+.job .job-body {
+    flex: 1;
+    display: flex;
+}
+
+.job .job-body progress {
+    flex: 1;
+    height: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    border: 0;
+    accent-color: #0d47a1;
+}
+
+.job .job-body progress::-moz-progress-bar {
+    animation-name: indeterminate-progress;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+}
+
+#jobs-root {
+    width: 40vw;
+}
+
+@keyframes indeterminate-progress {
+    0%, 5% {
+        margin-left: 0;
+        width: 10%;
+    }
+
+    50% {
+        margin-left: 35%;
+        width: 30%;
+    }
+
+    95%, 100% {
+        margin-left: 90%;
+        width: 10%;
+    }
+}

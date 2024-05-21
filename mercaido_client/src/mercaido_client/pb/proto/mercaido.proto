@@ -1,0 +1,87 @@
+// Copyright (C) 2023 Horus View and Explore B.V.
+// SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+//
+// SPDX-License-Identifier: MIT
+
+syntax = "proto2";
+
+package horus.mercaido;
+
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+  MESSAGE_TYPE_EVENT = 2;
+  MESSAGE_TYPE_REGISTER_SERVICES = 3;
+  MESSAGE_TYPE_PUBLISH_JOB = 4;
+}
+
+enum AttributeType {
+  ATTRIBUTE_TYPE_UNSPECIFIED = 0;
+  ATTRIBUTE_TYPE_TEXT = 1;
+  ATTRIBUTE_TYPE_FILE = 2;
+  ATTRIBUTE_TYPE_FOLDER = 3;
+  ATTRIBUTE_TYPE_SELECTION = 4;
+  ATTRIBUTE_TYPE_RECORDING_ID = 5;
+  ATTRIBUTE_TYPE_RECORDINGS_SERVER_CONNECTION = 6;
+  ATTRIBUTE_TYPE_MEDIA_SERVER_CONNECTION = 7;
+  ATTRIBUTE_TYPE_NUMBER = 8;
+  ATTRIBUTE_TYPE_BOOLEAN = 9;
+}
+
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_JOB_START = 1;
+  EVENT_TYPE_JOB_STOP = 2;
+  EVENT_TYPE_JOB_ERROR = 3;
+  EVENT_TYPE_JOB_PROGRESS = 4;
+}
+
+message MessageBase {
+  optional string recipient = 1;
+  optional RequestBase request = 2;
+  optional ResponseBase response = 3;
+}
+
+message RequestBase {
+  optional MessageType type = 2;
+  optional RegisterServices register_services = 3;
+  optional PublishJob publish_job = 4;
+  optional Event event = 5;
+}
+
+message ResponseBase {
+  optional MessageType type = 2;
+  optional bool success = 3;
+}
+
+message Service {
+  optional string endpoint = 1;
+  optional string name = 2;
+  optional string description = 3;
+  repeated Attribute attributes = 4;
+  optional string svg = 5;
+}
+
+message RegisterServices {
+  repeated Service services = 1;
+}
+
+message PublishJob {
+  repeated Service services = 1;
+  required string job_id = 2;
+}
+
+message Attribute {
+  required AttributeType type = 1;
+  optional string display_name = 2;
+  optional string display_description = 3;
+  repeated string values = 4;
+  optional string id = 5;
+  optional bool sensitive = 6;
+}
+
+message Event {
+  required EventType type = 1;
+  optional string job_id = 2;
+  optional double progress = 3;
+  optional string error_message = 4;
+}

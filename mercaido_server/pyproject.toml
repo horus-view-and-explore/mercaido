@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "mercaido-server"
+version = "0.1.0"
+description = "Server package for Mercaido."
+authors = ["Erwin Boskma", "Frank Smit"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "mercaido_server", from = "src" }]
+
+[tool.poetry.plugins."paste.app_factory"]
+"main" = "mercaido_server:main"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+mercaido_client = { path = "../mercaido_client", develop = true }
+pyramid = "^2.0.1"
+pyramid-jinja2 = "^2.10"
+alembic = "^1.11.1"
+pyramid-retry = "^2.1.1"
+pyramid-tm = "^2.5"
+sqlalchemy = "^2.0.19"
+zope-sqlalchemy = "^3.0"
+transaction = "^3.1.0"
+horus-media-client = "^0.9.6"
+proquint = "^0.2.1"
+
+[tool.poetry.group.dev.dependencies]
+pyramid_debugtoolbar = "^4.10"
+pytest = "^6.0.0"
+waitress = "^2.1.2"
+ipython = "^8.16.1"
+pyramid-ipython = "^0.2"
+
+[tool.poetry.scripts]
+mercaido_server = "pyramid.scripts.pserve:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,51 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+{% extends "mercaido_server:templates/layout.jinja2" %}
+{% block body %}
+  <div class="row">
+    <div class="col s12">
+      <h1>Media Server settings</h1>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 2rem;">
+    <div class="col s12">
+      <a class="btn-small btn-flat" href="{{ "home" | route_path }}">
+        <i class="material-icons left">chevron_left</i>
+        Back
+      </a>
+    </div>
+  </div>
+  
+  <div class="row">
+    <form method="post" class="col s12">
+      <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
+      <div class="row" style="margin-bottom: 1rem;">
+        <div class="input-field inline col s6">
+          <input
+            type="url"
+            name="endpoint"
+            id="endpoint"
+            value="{{ mediaserver.endpoint | default("", true) }}"
+            placeholder=""
+            class="validate"
+            autocomplete="url"
+            required
+          />
+          <label for="endpoint">Media Server Endpoint</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <button class="btn waves-effect waves-light blue darken-4" type="submit">
+            <i class="material-icons">save</i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock body %}

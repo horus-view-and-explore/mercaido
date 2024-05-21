@@ -1,0 +1,107 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+{% extends "mercaido_server:templates/layout.jinja2" %}
+{% block body %}
+  <div class="row">
+    <div class="col s12">
+      <h1>Recording Server settings</h1>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 2rem;">
+    <div class="col s12">
+      <a class="btn-small btn-flat" href="{{ "home" | route_path }}">
+        <i class="material-icons left">chevron_left</i>
+        Back
+      </a>
+    </div>
+  </div>
+  
+  <div class="row">
+    <form method="post" class="col s12">
+      <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
+      <div class="row" style="gap: 1rem;">
+        <div class="input-field inline col s6">
+          <input
+            type="text"
+            name="host"
+            id="host"
+            value="{{ recordingserver.host | default("", true) }}"
+            placeholder=""
+            class="validate"
+            required
+          />
+          <label for="host">Host</label>
+        </div>
+        <div class="input-field inline col s6">
+          <input
+            type="number"
+            name="port"
+            id="port"
+            value="{{ recordingserver.port | default(5432, true) }}"
+            placeholder=""
+            class="validate"
+            min="1"
+            max="65535"
+            required
+          />
+          <label for="port">Port number</label>
+        </div>
+      </div>
+      <div class="row" style="gap: 1rem; margin-top: 1rem;">
+        <div class="input-field inline col s6">
+          <input
+            type="text"
+            name="database"
+            id="database"
+            value="{{ recordingserver.database | default("", true) }}"
+            placeholder=""
+            class="validate"
+            required
+          />
+          <label for="database">Database</label>
+        </div>
+      </div>
+      <div class="row" style="gap: 1rem; margin-top: 1rem;">
+        <div class="input-field inline col s6">
+          <input
+            type="text"
+            name="username"
+            id="username"
+            value="{{ recordingserver.username | default("", true) }}"
+            placeholder=""
+            autocomplete="username"
+            class="validate"
+            required
+          />
+          <label for="password">Username</label>
+        </div>
+        <div class="input-field inline col s6">
+          <i class="material-icons suffix">visibility_off</i>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value="{{ recordingserver.password | default("", true) }}"
+            placeholder=""
+            autocomplete="current-password"
+            class="validate"
+            required
+          />
+          <label for="password icon_suffix">Password</label>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div class="col s12">
+          <button class="btn waves-effect waves-light blue darken-4" type="submit">Save
+            <i class="material-icons right">save</i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock body %}

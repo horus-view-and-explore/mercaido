@@ -1,0 +1,26 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+<div class="navbar-fixed">
+  <nav class="blue darken-4">
+    <div class="nav-wrapper container">
+      <a href="/" class="brand-logo">Mercaido</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li>
+          <a href="https://www.horus.nu" target="_blank">Horus</a>
+        </li>
+        <li>
+          <a href="#" data-target="jobs-root" class="sidenav-trigger show-on-large" title="Running jobs">
+            Jobs
+            {% if (jobs | length) > 0 -%}
+              <span class="new badge" data-badge-caption="{{ ngettext("job", "jobs", jobs | length) }}">{{ jobs | length }}</span>
+            {%- endif %}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
