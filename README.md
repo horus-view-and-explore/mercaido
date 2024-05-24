@@ -22,10 +22,10 @@ As is true for all marketplaces, one needs to know their way around and speak th
 
 ```mermaid
 graph TD;
-    Customer-->mc;
+    Vendor-->mc;
     mc<-->MC;
 
-    Customer-->hmc;
+    Vendor-->hmc;
     hmc<-->MS;
     hmc<-->RS
 ```
@@ -40,7 +40,7 @@ A customer would like to purchase some traffic sign information for a specific r
 
 This customer fills in the required fields in the web interface and then the vendor's service does the following:
 
-1. Query the `Recording server`, requesting all frames/recordings matching the customers criteria.
+1. Query the `Recording server`, requesting all frames/recordings matching the customer's criteria.
 ```mermaid
 flowchart LR;
    Service-->|query frames|RS
