@@ -1,5 +1,70 @@
 # Mercaido
 
+The word mercaido is a blend of `mercado` and `AI`. Where the
+first symbolizes a marketplace, the addition of `AI` transforms it into a `smart-marketplace`. The main trade here is that of georeferenced material and the ability to perform automated (the smart part) extraction, transformations and other high-level functions on it. A common product is the creation of maps (feature data) from spherical imagery.
+
+How is this exchange of products and services between the different vendors achieved?
+
+## The main Horus View & Explore stalls
+`Mercaido server` (`MC`) is the central message broker. This means that all registration and configuration of the market services can be done here.
+
+`Recording server` (`RS`) provides information on captured imagery and its time and location. One such single instance/record is often refereed to as a `frame`.
+
+`Media server` (`MS`) has the ability to transform a `frame` into imagery, often referred to as rendering. A specific frame can be rendered into a multitude of image outputs (not to be confused with formats). These outputs closely resemble the concept of using different cameras to observe the scene. For example, one can change the `field of view`, `projection` (`spherical`, `orthographic`, ...), `resolution` and many more.
+The server also performs `georeferencing` on rendered pixels, allowing one to create spatial information from imagery.
+
+## Communication
+As is true for all marketplaces, one needs to know their way around and speak the same language as the vendors. Horus provides two `python` libraries for this
+
+1. `mercaido-client` (`mc`) is used to communicate with the `Mercaido server` (https://github.com/horus-view-and-explore/mercaido/tree/main/mercaido_client).
+
+2. `horus-media-client` (`hmc`) allows one to communicate with both the `Media server` and the `Recording server`(https://github.com/horus-view-and-explore/horus-media-client).
+
+```mermaid
+graph TD;
+    Customer-->mc;
+    mc<-->MC;
+
+    Customer-->hmc;
+    hmc<-->MS;
+    hmc<-->RS
+```
+
+## In a nutshell
+A vendor has an AI service for extracting traffic signs from spherical imagery and would like be part of `Mercaido`.
+
+Assuming a working mercaido environment, the vendor writes a python service that registers with `MC` using the `mc` library.
+Typically this includes: name, required fields, and output format. Now this service is visible and available in the Mercaido marketplace.
+
+A customer would like to purchase some traffic sign information for a specific region.
+
+This customer fills in the required fields in the web interface and then the vendor's service does the following:
+
+1. Query the `Recording server`, requesting all frames/recordings matching the customers criteria.
+```mermaid
+flowchart LR;
+   Service-->|query frames|RS
+
+```
+2. Configure the camera/rendering settings and acquire imagery.
+```mermaid
+flowchart LR;
+   Service-->|render imagery|MS
+
+```
+3. Use the vendor's proprietary algorithm for detecting traffic signs.
+4. Request spatial coordinates for the detected objects/pixels.
+
+```mermaid
+flowchart LR;
+   Service-->|detection|algorithm
+   algorithm-->|geoposition|MS
+```
+5. After which the service can store the results on disk or WFS-T.
+```mermaid
+flowchart LR;
+   Service-->|results|store
+```
 ## AMQP server
 
 Before continuing to the installation or development sections, make sure
