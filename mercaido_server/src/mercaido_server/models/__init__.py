@@ -22,11 +22,13 @@ from .mediaserver import MediaServer  # noqa: F401
 from .recordingserver import RecordingServer  # noqa: F401
 from .job import Job  # noqa: F401
 from .service import Service  # noqa: F401
+from .featureserver import FeatureServer  # noqa: F401
 
 
 logger = logging.getLogger(__name__)
 
 configure_mappers()
+
 
 @event.listens_for(Engine, "connect")
 def setup_sqlite(connection: DBAPIConnection, connection_record: ConnectionPoolEntry):
@@ -35,6 +37,7 @@ def setup_sqlite(connection: DBAPIConnection, connection_record: ConnectionPoolE
     cursor.execute("PRAGMA journal_mode=WAL")
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
+
 
 def get_engine(settings: ISettings, prefix="sqlalchemy.") -> Engine:
     return engine_from_config(settings, prefix)

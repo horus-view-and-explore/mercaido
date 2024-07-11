@@ -1,0 +1,69 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+{% extends "mercaido_server:templates/layout.jinja2" %}
+{% block body %}
+  <div class="row">
+    <div class="col s12">
+      <h1>Feature Servers</h1>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 2rem;">
+    <div class="col s12">
+      <a class="btn-small btn-flat" href="{{ "home" | route_path }}">
+        <i class="material-icons left">chevron_left</i>
+        Back
+      </a>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col s12">
+      <table class="responsive-table striped highlight">
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for featureserver in featureservers %}
+            <tr>
+              <td>
+                {{ featureserver.endpoint }}
+              </td>
+              <td>
+                <div style="display: flex; justify-content: flex-end;">
+                  <a href="{{ "feature_servers_edit" | route_path(id=featureserver.id) }}" class="btn-small waves-effect">
+                    <i class="material-icons">edit</i>
+                  </a>
+                  <form
+                    style="display: inline-block; margin-left: 0.5rem;"
+                    method="POST"
+                    action="{{ "feature_servers_delete" | route_path(id=featureserver.id) }}"
+                    onsubmit="return window.confirm('Are you sure?')"
+                    >
+                    <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
+                    <button type="submit" class="btn-small red waves-effect">
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="fixed-action-button" style="position: fixed; bottom: 45px; right: 24px;">
+    <a href="{{ "feature_servers_new" | route_path }}" class="btn-floating btn-large blue waves-effect waves-light">
+      <i class="material-icons">add</i>
+    </a>
+  </div>
+{% endblock body %}
+       

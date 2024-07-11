@@ -6,7 +6,7 @@
   description = "A Python project flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
     };

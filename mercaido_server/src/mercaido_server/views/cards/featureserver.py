@@ -5,12 +5,12 @@
 from . import Card
 
 
-class MediaServerCard(Card):
+class FeatureServerCard(Card):
     def title(self) -> str:
-        return "Media Server"
+        return "Feature Server"
 
     def description(self) -> str:
-        return "Configure the connection to the Horus Media Server"
+        return "Configure the connection to a WFS-T Feature Server"
 
     def svg(self) -> str:
         return """<svg viewBox="0 0 64 64" version="1.0" xmlns="http://www.w3.org/2000/svg" style="background-color: #ffffff;">
@@ -18,4 +18,4 @@ class MediaServerCard(Card):
         </svg>"""
 
     def endpoint(self) -> str:
-        return self.request.route_path("media_servers")
+        return self.request.route_path("feature_servers")

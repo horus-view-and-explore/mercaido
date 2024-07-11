@@ -27,6 +27,8 @@ SPDX-License-Identifier: MIT
           <span>{{ attribute.display_name }}</span>
         </label>
         </p>
+      {% elif attribute.type == 10 and featureserver is not none -%}
+        {{ complex_value_input(attribute, featureserver.name, featureserver.id) }}
       {% else %}
         <input
           type="{{ input_type(attribute) }}"
@@ -44,6 +46,8 @@ SPDX-License-Identifier: MIT
 {%- macro input_type(attribute) -%}
   {%- if attribute.type == 8 -%}
     number
+  {%- elif attribute.type == 10 or attribute.type == 11 -%}
+    url
   {%- else -%}
     text
   {%- endif -%}
@@ -62,6 +66,25 @@ SPDX-License-Identifier: MIT
     style="cursor: not-allowed;"
     />
     <label for="{{ attribute.id }}">{{ attribute.display_name }}</label>
+{%- endmacro %}
+
+{% macro complex_value_input(attribute, display_value, value) -%}
+  <i class="material-icons suffix">lock</i>
+  <input
+    type="hidden"
+    name="{{attribute.id}}"
+    id="{{attribute.id}}"
+    value="{{value}}" />
+  <input
+    type="text"
+    id="{{attribute.id}}_display"
+    value="{{display_value}}"
+    readonly
+    placeholder=""
+    class="grey-text"
+    style="cursor: not-allowed;"
+    />
+  <label for="{{ attribute.id }}_display">{{ attribute.display_name}}</label>
 {%- endmacro %}
 
 {% macro recordings_dropdown(attribute, recordings) -%}

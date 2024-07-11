@@ -1,0 +1,46 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+{% extends "mercaido_server:templates/layout.jinja2" %}
+{% block body %}
+  <div class="row">
+    <div class="col s12">
+      <h1>{{featureserver.name}} Layers</h1>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 2rem;">
+    <div class="col s12">
+      <a class="btn-small btn-flat" href="{{ "feature_servers_edit" | route_path(id=featureserver.id) }}">
+        <i class="material-icons left">chevron_left</i>
+        Back
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <table class="responsive-table striped highlight">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Bounding box</th>
+            <th>CRS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for layer in layers %}
+            <tr>
+              <td>{{ layer.name }}</td>
+              <td>{{ layer.extent }}</td>
+              <td>{{ layer.crs }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock body %}

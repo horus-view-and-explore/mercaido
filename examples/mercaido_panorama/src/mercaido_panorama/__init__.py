@@ -17,7 +17,7 @@ from mercaido_client.pb.mercaido import (
     MessageType,
     Service,
     Event,
-    PublishJob
+    PublishJob,
 )
 
 from pprint import pformat
@@ -69,6 +69,17 @@ class PanoramaService:
                     display_name="Recordings Server",
                     sensitive=True,
                 ),
+                Attribute(
+                    type=AttributeType.ATTRIBUTE_TYPE_FEATURESERVER,
+                    id="feature_server",
+                    display_name="Feature Server",
+                    sensitive=True,
+                ),
+                Attribute(
+                    type=AttributeType.ATTRIBUTE_TYPE_TEXT,
+                    id="feature_layer",
+                    display_name="Feature Layer Name",
+                ),
             ],
         )
         self.client = ServiceClient(service, url)
@@ -77,8 +88,7 @@ class PanoramaService:
     def run(self) -> None:
         logger.info(f"{self.service_id} -> Starting")
         self.client_thread = threading.Thread(
-            target=self.client_job_listener,
-            daemon=True
+            target=self.client_job_listener, daemon=True
         )
         self.client_thread.start()
         self.work()
@@ -116,11 +126,13 @@ class PanoramaService:
         try:
             panorama = Panorama(job, self.client.publish_event)
             panorama.execute()
+            ack.ok()
 
         except Exception as err:
             logger.error(f"{self.service_id} -> {pformat(err)}")
             logger.error("".join(traceback.format_exception(err)))
             ack.cancel()
+
 
 def main() -> int:
     args = parse_cli_arguments(sys.argv[1:])
@@ -128,9 +140,7 @@ def main() -> int:
     logging.basicConfig(style="{")
     logging.getLogger("mercaido_panorama").setLevel(logging.INFO)
 
-    service = PanoramaService(
-        "horus.mercaido.panorama", args.amqp
-    )
+    service = PanoramaService("horus.mercaido.panorama", args.amqp)
 
     try:
         service.run()

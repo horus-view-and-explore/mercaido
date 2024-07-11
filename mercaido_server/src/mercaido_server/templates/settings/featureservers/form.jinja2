@@ -1,0 +1,116 @@
+{#
+SPDX-FileCopyrightText: 2023, 2024 Horus View and Explore B.V.
+
+SPDX-License-Identifier: MIT
+#}
+
+{% extends "mercaido_server:templates/layout.jinja2" %}
+{% block body %}
+  <div class="row">
+    <div class="col s12">
+      <h1>Feature Server settings</h1>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 2rem;">
+    <div class="col s12">
+      <a class="btn-small btn-flat" href="{{ "settings" | route_path }}">
+        <i class="material-icons left">chevron_left</i>
+        Back
+      </a>
+      {% if featureserver.id %}
+      <div class="right">
+        <a href="{{ "feature_servers_layers" | route_path(id=featureserver.id) }}" class="btn-small btn-flat">
+          <i class="material-icons left">layers</i>
+          Layers
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="row">
+    <form method="post" class="col s12">
+      <input type="hidden" name="csrf_token" value="{{ get_csrf_token() }}">
+      <div class="row" style="margin-bottom: 1rem;">
+        <div class="input-field inline col s6">
+          <select
+            name="server_type"
+            id="server_type"
+            required
+            >
+            <option>Select Feature Server type</option>
+            <option value="generic" {{ "selected" if featureserver.server_type == "generic" }}>Generic WFS Server</option>
+            <option value="geoserver" {{ "selected" if featureserver.server_type == "geoserver" }}>GeoServer</option>
+          </select>
+          <label for="server_type">Server type</label>
+        </div>
+      </div>      <div class="row" style="margin-bottom: 1rem;">
+        <div class="input-field inline col s6">
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value="{{ featureserver.name | default("", true) }}"
+            placeholder=""
+            class="validate"
+            autocomplete="url"
+            required
+          />
+          <label for="endpoint">Feature Server Name</label>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom: 1rem;">
+        <div class="input-field inline col s6">
+          <input
+            type="url"
+            name="endpoint"
+            id="endpoint"
+            value="{{ featureserver.endpoint | default("", true) }}"
+            placeholder=""
+            class="validate"
+            autocomplete="url"
+            required
+          />
+          <label for="endpoint">Feature Server Endpoint</label>
+        </div>
+      </div>
+      <fieldset>
+        <legend>GeoServer options</legend>
+        <div class="row" style="margin-bottom: 1rem;">
+          <div class="input-field inline col s6">
+            <input
+              type="text"
+              name="geoserver_workspace"
+              id="geoserver_workspace"
+              value="{{ featureserver.attributes["geoserver_workspace"] | default("", true) }}"
+              placeholder=""
+              class="validate"
+              />
+              <label for="geoserver_workspace">GeoServer Workspace</label>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 1rem;">
+          <div class="input-field inline col s6">
+            <input
+              type="text"
+              name="geoserver_datastore"
+              id="geoserver_datastore"
+              value="{{ featureserver.attributes["geoserver_datastore"] | default("", true) }}"
+              placeholder=""
+              class="validate"
+              />
+              <label for="geoserver_datastore">GeoServer datastore name</label>
+          </div>
+        </div>
+      </fieldset>
+      <div class="row">
+        <div class="col s12">
+          <button class="btn waves-effect waves-light blue darken-4" type="submit">
+            <i class="material-icons">save</i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock body %}

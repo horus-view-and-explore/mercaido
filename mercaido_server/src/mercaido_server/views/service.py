@@ -34,8 +34,7 @@ class ServiceViews:
     def show(self) -> IResponse:
         service_id = self.request.matchdict["service"]
         service = self.request.dbsession.scalar(
-            sa.select(models.Service)
-            .where(models.Service.ident == service_id),
+            sa.select(models.Service).where(models.Service.ident == service_id),
         )
 
         if service is None:
@@ -54,6 +53,9 @@ class ServiceViews:
         recordingserver = self.request.dbsession.scalars(
             sa.select(models.RecordingServer).limit(1)
         ).first()
+        featureserver = self.request.dbsession.scalars(
+            sa.select(models.FeatureServer).limit(1)
+        ).first()
         recordings = None
 
         if recordingserver is not None:
@@ -63,6 +65,7 @@ class ServiceViews:
             "service": service,
             "mediaserver": mediaserver,
             "recordingserver": recordingserver,
+            "featureserver": featureserver,
             "recordings": recordings,
         }
 
@@ -72,6 +75,8 @@ class ServiceViews:
         for attr in service.attributes:
             if attr.type == messages.AttributeType.ATTRIBUTE_TYPE_BOOLEAN:
                 attr.values = [str(attr.id in params)]
+            elif attr.type == messages.AttributeType.ATTRIBUTE_TYPE_FEATURESERVER:
+                attr.values = self._feature_server_tuple(int(params[attr.id][0]))
             else:
                 attr.values = params[attr.id]
 
@@ -114,7 +119,9 @@ class ServiceViews:
             print(f"Error connecting to recording server: {e}")
             return None
 
-    def _attributes_to_dict(self, attributes: list[messages.Attribute]) -> dict[str, Any]:
+    def _attributes_to_dict(
+        self, attributes: list[messages.Attribute]
+    ) -> dict[str, Any]:
         def deconstruct_attribute(result, attr):
             if not attr.sensitive:
                 result[attr.id] = {
@@ -125,3 +132,14 @@ class ServiceViews:
             return result
 
         return reduce(deconstruct_attribute, attributes, {})
+
+    def _feature_server_tuple(self, id: int) -> list[str]:
+        featureserver = self.request.dbsession.get(models.FeatureServer, id)
+        attrs = {
+            "wfs_endpoint": featureserver.endpoint,
+            "server_type": featureserver.server_type,
+        }
+
+        attrs |= featureserver.attributes
+
+        return [item for prop in attrs.items() for item in prop]

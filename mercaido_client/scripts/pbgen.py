@@ -44,6 +44,7 @@ def main():
         "",
         "from typing import Optional, cast",
         "from enum import IntEnum",
+        "from itertools import islice",
     ]
 
     _, msg = messages[0]
@@ -154,6 +155,24 @@ def main():
             cbuffer.append(f'        self.obj.ClearField("{field.name}")')
             cbuffer.append("")
 
+            if _is_list_of_string(field):
+                cbuffer.append(f"    def {field.name}_as_dict(self) -> dict[str, str]:")
+                cbuffer.append(f"        if len(self.{field.name}) == 0:")
+                cbuffer.append("            return {}")
+                cbuffer.append(f"        elif len(self.{field.name}) % 2 != 0:")
+                cbuffer.append(
+                    f"            raise ValueError('Field `{name}.{field.name}` should contain an even amount of items representing alternating keys and values')"
+                )
+                cbuffer.append("        def _it_to_tuples(it):")
+                cbuffer.append("            while pair := tuple(islice(it, 2)):")
+                cbuffer.append("                yield pair")
+                cbuffer.append(f"        iterator = iter(self.{field.name})")
+                cbuffer.append(
+                    "        return dict([pair for pair in _it_to_tuples(iterator)])"
+                )
+
+            cbuffer.append("")
+
         cbuffer.append("")
 
     for name, msg in messages:
@@ -186,12 +205,20 @@ def _is_msg(field):
     return field.type == PBFieldDescriptor.TYPE_MESSAGE
 
 
+def _is_string(field):
+    return field.type == PBFieldDescriptor.TYPE_STRING
+
+
 def _is_list(field):
     return field.label == PBFieldDescriptor.LABEL_REPEATED
 
 
 def _is_list_of_msg(field):
     return _is_msg(field) and _is_list(field)
+
+
+def _is_list_of_string(field):
+    return _is_string(field) and _is_list(field)
 
 
 def _fqmn(module):

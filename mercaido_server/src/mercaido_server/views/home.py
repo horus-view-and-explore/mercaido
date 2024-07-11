@@ -6,10 +6,8 @@ import sqlalchemy as sa
 from pyramid.view import view_config
 from pyramid.interfaces import IRequest, IResponse
 
-from ..models import Service, MediaServer, RecordingServer
+from ..models import Service, MediaServer, RecordingServer, FeatureServer
 
-from .cards.mediaserver import MediaServerCard
-from .cards.recordingserver import RecordingServerCard
 from .cards.service import ServiceCard
 
 
@@ -24,10 +22,18 @@ def home(request: IRequest) -> IResponse:
     recording_servers = request.dbsession.scalar(
         sa.select(sa.func.count(RecordingServer.id))
     )
-    configured = (media_servers > 0) and (recording_servers > 0)
+    feature_servers = request.dbsession.scalar(
+        sa.select(sa.func.count(FeatureServer.id))
+    )
+
+    configured = (
+        (media_servers > 0) and (recording_servers > 0) and (feature_servers > 0)
+    )
 
     return {
         "configured": configured,
-        "base_cards": [MediaServerCard(request), RecordingServerCard(request)],
+        "media_servers": media_servers > 0,
+        "recording_servers": recording_servers > 0,
+        "feature_servers": feature_servers > 0,
         "service_cards": service_cards,
     }

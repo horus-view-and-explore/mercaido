@@ -15,12 +15,10 @@
           let
             addNativeBuildInputs =
               name: nativeBuildInputs:
-              prev.${name}.overridePythonAttrs (
-                old: {
-                  nativeBuildInputs =
-                    (builtins.map (x: prev.${x}) nativeBuildInputs) ++ (old.nativeBuildInputs or [ ]);
-                }
-              );
+              prev.${name}.overridePythonAttrs (old: {
+                nativeBuildInputs =
+                  (builtins.map (x: prev.${x}) nativeBuildInputs) ++ (old.nativeBuildInputs or [ ]);
+              });
             mkOverrides = pkgs.lib.attrsets.mapAttrs (name: value: addNativeBuildInputs name value);
           in
           mkOverrides {
@@ -30,6 +28,7 @@
             types-pika = [ "setuptools" ];
             horus-media-client = [ "setuptools" ];
             proquint = [ "setuptools" ];
+            gdal = [ "numpy" ];
           }
           // {
             ruff = null;
@@ -58,16 +57,40 @@
             projectDir = ./../mercaido_server;
             python = python3;
             overrides = python-overrides;
+            editablePackageSources = {
+              mercaido_server = ./src;
+            };
           };
           mercaido-client-env = poetry2nix.mkPoetryEnv {
             projectDir = ./../mercaido_client;
             python = python3;
             overrides = python-overrides;
+            editablePackageSources = {
+              mercaido_client = ./src;
+            };
           };
           mercaido-dummy-service-env = poetry2nix.mkPoetryEnv {
             projectDir = ./../examples/mercaido_dummy_service;
             python = python3;
             overrides = python-overrides;
+          };
+          mercaido-panorama-service-env = poetry2nix.mkPoetryEnv {
+            projectDir = ./../examples/mercaido_panorama;
+            python = python3;
+            overrides = python-overrides;
+            editablePackageSources = {
+              mercaido_panorama = ./src;
+            };
+          };
+
+          mercaido-env = pkgs.symlinkJoin {
+            name = "mercaido-env";
+            paths = [
+              mercaido-server-env
+              mercaido-client-env
+              mercaido-dummy-service-env
+              mercaido-panorama-service-env
+            ];
           };
 
           d2LibPath = lib.makeLibraryPath (with pkgs; [ expat ]);
@@ -81,19 +104,20 @@
         mkShell {
           name = "mercaido";
           packages = [
-            mercaido-server-env
-            mercaido-client-env
-            mercaido-dummy-service-env
+            # mercaido-server-env
+            mercaido-env
+            # mercaido-dummy-service-env
 
             buf
             cookiecutter
             d2-wrapper
+            gdal
+            geoserver
             just
             nodejs
+            nodePackages.bash-language-server
             nodePackages.prettier
             nodePackages.typescript-language-server
-            nodePackages.vscode-html-languageserver-bin
-            nodePackages.vscode-css-languageserver-bin
             nodePackages.yaml-language-server
             mypy
             poetry
@@ -103,8 +127,11 @@
             python3Packages.python-lsp-ruff
             python3Packages.python-lsp-black
             ruff
+            shellcheck
+            shfmt
             sqlite-interactive
             taplo
+            vscode-langservers-extracted
           ];
         };
     };
